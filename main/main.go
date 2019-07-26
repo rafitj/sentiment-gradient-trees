@@ -7,6 +7,8 @@ import (
 )
 
 func main() {
-	response := nlp.EmotionAnalysis("Hey what's up Alexa, I'm have a pretty bad day.")
+	text := "Hey what's up mom, I'm having a pretty bad day today. I don't know why I keep getting bullied I just hate school so much."
+	fmt.Println(text)
+	response := nlp.KeywordIdentification(text)
 	fmt.Println(response)
 }

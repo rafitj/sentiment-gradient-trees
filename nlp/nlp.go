@@ -55,7 +55,65 @@ func EntityIdentification(text string) string {
 	}
 	result := naturalLanguageUnderstanding.GetAnalyzeResult(response)
 	b, _ := json.MarshalIndent(result, "", "   ")
-	return string(b)
+	unwrapped := unWrapJSON(b, []string{"entities"})
+
+	return (string(unwrapped))
+}
+
+// ConceptIdentification function via IBM NLU
+func ConceptIdentification(text string) string {
+	naturalLanguageUnderstanding := verifyNLU()
+
+	limit := int64(1)
+
+	response, responseErr := naturalLanguageUnderstanding.Analyze(
+		&naturallanguageunderstandingv1.AnalyzeOptions{
+			Text: &text,
+			Features: &naturallanguageunderstandingv1.Features{
+				Concepts: &naturallanguageunderstandingv1.ConceptsOptions{
+					Limit: &limit,
+				},
+			},
+		},
+	)
+	if responseErr != nil {
+		panic(responseErr)
+	}
+	result := naturalLanguageUnderstanding.GetAnalyzeResult(response)
+	b, _ := json.MarshalIndent(result, "", "   ")
+	unwrapped := unWrapJSON(b, []string{"concepts"})
+
+	return (string(unwrapped))
+}
+
+// KeywordIdentification function via IBM NLU
+func KeywordIdentification(text string) string {
+	naturalLanguageUnderstanding := verifyNLU()
+
+	sentiment := true
+	emotion := true
+	limit := int64(3)
+
+	response, responseErr := naturalLanguageUnderstanding.Analyze(
+		&naturallanguageunderstandingv1.AnalyzeOptions{
+			Text: &text,
+			Features: &naturallanguageunderstandingv1.Features{
+				Keywords: &naturallanguageunderstandingv1.KeywordsOptions{
+					Sentiment: &sentiment,
+					Emotion:   &emotion,
+					Limit:     &limit,
+				},
+			},
+		},
+	)
+	if responseErr != nil {
+		panic(responseErr)
+	}
+	result := naturalLanguageUnderstanding.GetAnalyzeResult(response)
+	b, _ := json.MarshalIndent(result, "", "   ")
+	unwrapped := unWrapJSON(b, []string{"keywords"})
+
+	return (string(unwrapped))
 }
 
 // EmotionAnalysis function via IBM NLU
